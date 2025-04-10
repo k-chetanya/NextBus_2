@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Buses | NextBus</title>
+    <link rel="stylesheet" href="Styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- College Image -->
+    <div class="clg">
+        <img src="https://vignaniit.edu.in/images/09%20copy-1.jpg" alt="College Campus">
+    </div>
+
+       <!-- Header and Navigation -->
+    <header class="header">
+        <div class="header-content">
+            <h1><i class="fas fa-bus"></i> NextBus</h1>
+            <p>Smart college bus tracking system</p>
+        </div>
+    </header>
+    <nav class="navbar">
+        <div class="nav-container">
+            <ul class="nav-links">
+                <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="#"><i class="fas fa-info-circle"></i> About</a></li>
+                <li><a href="#"><i class="fas fa-route"></i> Routes</a></li>
+                <li><a href="#"><i class="fas fa-phone"></i> Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        <div class="route-header">
+            <h2><i class="fas fa-bus"></i> Available Buses</h2>
+            <p id="route-info" class="route-info-text"></p>
+        </div>
+        
+        <div class="bus-list" id="bus-list">
+            <!-- Buses will be loaded here -->
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-about">
+                <div class="footer-logo">
+                    <i class="fas fa-bus"></i> NextBus
+                </div>
+                <p>Making college commutes smarter and more reliable.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Routes</a></li>
+                    <li><a href="#">Schedule</a></li>
+                    <li><a href="#">Fares</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h3>Support</h3>
+                <ul>
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Feedback</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; 2023 NextBus. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        // Get route details from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const start = urlParams.get('start') || 'Srikakulam';
+        const destination = urlParams.get('destination') || 'Visakhapatnam';
+        
+        // Set route information
+        document.getElementById('route-info').textContent = `From ${start} to ${destination}`;
+
+        // Bus data
+        const buses = [
+    {
+        number: "1010",
+        name: "City Ordinary",
+        departure: "11:15 AM",
+        arrival: "1:27 PM",
+        duration: "2 hours 12 min",
+        price: "₹55",
+        type: "Ordinary",
+        amenities: ["Seating", "Standing Space"]
+    },
+    {
+        number: "2020",
+        name: "Ultra Deluxe",
+        departure: "12:30 PM",
+        arrival: "1:55 PM",
+        duration: "1 hour 25 min",
+        price: "₹180",
+        type: "Deluxe",
+        amenities: ["WiFi", "Charging Ports"]
+    },
+    {
+        number: "3030",
+        name: "Metro Express",
+        departure: "1:45 PM",
+        arrival: "3:35 PM",
+        duration: "1 hour 50 min",
+        price: "₹110",
+        type: "Express",
+        amenities: ["Pushback Seats", "Reading Lights"]
+    },
+    {
+        number: "4040",
+        name: "Super Luxury",
+        departure: "2:20 PM",
+        arrival: "3:34 PM",
+        duration: "1 hour 14 min",
+        price: "₹215",
+        type: "Luxury",
+        amenities: ["WiFi","AC" ,"Charging Ports","Air Suspension", "Reclining Seats"]
+        
+    },
+    {
+        number: "5050",
+        name: "Palle Velugu",
+        departure: "3:00 PM",
+        arrival: "5:00 PM",
+        duration: "2 hours",
+        price: "₹90",
+        type: "Rural",
+        amenities: ["Basic Seating"]
+    },
+    {
+        number: "5151",
+        name: "Palle Velugu",
+        departure: "6:30 PM",
+        arrival: "8:30 PM",
+        duration: "2 hours",
+        price: "₹90",
+        type: "Rural",
+        amenities: ["Basic Seating"]
+    },
+    {
+        number: "6060",
+        name: "Non-Stop Express",
+        departure: "4:10 PM",
+        arrival: "5:08 PM",
+        duration: "58 min",
+        price: "₹150",
+        type: "Express",
+        amenities: ["Limited Stops", "Comfortable Seating"]
+    },
+    {
+        number: "7070",
+        name: "City Ordinary",
+        departure: "5:30 PM",
+        arrival: "7:42 PM",
+        duration: "2 hours 12 min",
+        price: "₹55",
+        type: "Ordinary",
+        amenities: ["Seating", "Standing Space"]
+    },
+    {
+        number: "8080",
+        name: "Metro Express",
+        departure: "6:10 PM",
+        arrival: "8:00 PM",
+        duration: "1 hour 50 min",
+        price: "₹110",
+        type: "Express",
+        amenities: ["Pushback Seats", "Reading Lights"]
+    },
+    {
+        number: "9090",
+        name: "Ultra Deluxe",
+        departure: "8:00 PM",
+        arrival: "9:25 PM",
+        duration: "1 hour 25 min",
+        price: "₹180",
+        type: "Deluxe",
+        amenities: ["WiFi", "Charging Ports"]
+    },
+    {
+        number: "1111",
+        name: "Super Luxury",
+        departure: "9:00 PM",
+        arrival: "10:14 PM",
+        duration: "1 hour 14 min",
+        price: "₹215",
+        type: "Luxury",
+amenities: ["WiFi","AC" ,"Charging Ports","Air Suspension", "Reclining Seats"]
+    },
+    {
+        number: "1212",
+        name: "Metro Express",
+        departure: "9:15 PM",
+        arrival: "11:05 PM",
+        duration: "1 hour 50 min",
+        price: "₹110",
+        type: "Express",
+        amenities: ["Pushback Seats", "Reading Lights"]
+    }
+];
+
+        // Render bus list
+        const busList = document.getElementById('bus-list');
+        
+        buses.forEach(bus => {
+            const busCard = document.createElement('div');
+            busCard.className = 'bus-card';
+            
+            busCard.innerHTML = `
+                <div class="bus-header">
+                    <h3>${bus.name}</h3>
+                    <span class="bus-number">${bus.number}</span>
+                    <span class="bus-type ${bus.type.toLowerCase()}">${bus.type}</span>
+                </div>
+                
+                <div class="bus-timings">
+                    <div>
+                        <span class="time">${bus.departure}</span>
+                        <span class="location">${start}</span>
+                    </div>
+                    <div class="duration">
+                        <i class="fas fa-clock"></i>
+                        <span>${bus.duration}</span>
+                    </div>
+                    <div>
+                        <span class="time">${bus.arrival}</span>
+                        <span class="location">${destination}</span>
+                    </div>
+                </div>
+                
+                <div class="bus-amenities">
+                    ${bus.amenities.map(amenity => `<span class="amenity"><i class="fas fa-check"></i> ${amenity}</span>`).join('')}
+                </div>
+                
+                <div class="bus-footer">
+                    <div class="price">${bus.price}</div>
+                    <button class="track-btn" onclick="trackBus('${bus.number}', '${start}', '${destination}')">
+                        <i class="fas fa-map-marker-alt"></i> Track Bus
+                    </button>
+                </div>
+            `;
+            
+            busList.appendChild(busCard);
+        });
+
+        function trackBus(busNumber, start, destination) {
+            window.location.href = `NewTrack.html?bus=${busNumber}&start=${encodeURIComponent(start)}&destination=${encodeURIComponent(destination)}`;
+        }
+    </script>
+</body>
+</html>
