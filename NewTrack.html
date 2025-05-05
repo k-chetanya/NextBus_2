@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bus Tracking | NextBus</title>
-    <link rel="stylesheet" href="Styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -35,6 +34,72 @@
             line-height: 1.6;
         }
 
+        .clg img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .header {
+            background-color: var(--primary);
+            color: var(--light);
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .navbar {
+            background-color: var(--light);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            padding: 15px 0;
+        }
+
+        .nav-links li {
+            margin: 0 15px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a.active {
+            color: var(--primary);
+            font-weight: 600;
+        }
 
         .container {
             max-width: 1000px;
@@ -87,6 +152,21 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
+        }
+
+        .status-on-time {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .status-delayed {
+            color: var(--warning);
+            font-weight: 600;
+        }
+
+        .status-completed {
+            color: var(--primary);
+            font-weight: 600;
         }
 
         .progress-container {
@@ -411,6 +491,7 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="Styles.css">
 </head>
 <body>
     <!-- College Image -->
@@ -425,11 +506,10 @@
         </div>
     </header>
         
-    </header>
-      <nav class="navbar">
+    <nav class="navbar">
         <div class="nav-container">
             <ul class="nav-links">
-                <li><a href="index.html" class="active"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
                 <li><a href="About.html"><i class="fas fa-info-circle"></i> About</a></li>
                 <li><a href="Routes.html"><i class="fas fa-route"></i> All Routes</a></li>
                 <li><a href="Contact.html"><i class="fas fa-phone"></i> Contact</a></li>
@@ -518,7 +598,7 @@
                     <a href="#"><i class="fab fa-linkedin-in"></i></a>
                 </div>
             </div>
-          <div class="footer-links">
+            <div class="footer-links">
                 <h3>Quick Links</h3>
                 <ul>
                     <li><a href="index.html">Home</a></li>
@@ -542,170 +622,323 @@
         </div>
     </footer>
 
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Enhanced route database with all possible routes between the 5 locations
+        const routeDatabase = {
+            "routes": [
+                {
+                    "id": "route1",
+                    "name": "Srikakulam to Visakhapatnam",
+                    "busNumbers": ["1010", "2020", "3030"],
+                    "stops": [
+                        {"name": "Srikakulam", "coords": [18.2969, 83.8963]},
+                        {"name": "Vizianagaram", "coords": [18.1167, 83.4167]},
+                        {"name": "Visakhapatnam", "coords": [17.6868, 83.2185]}
+                    ],
+                    "distance": 110,
+                    "duration": "2 hours 30 minutes"
+                },
+                {
+                    "id": "route2",
+                    "name": "Visakhapatnam to Anakapalli",
+                    "busNumbers": ["4040", "5050"],
+                    "stops": [
+                        {"name": "Visakhapatnam", "coords": [17.6868, 83.2185]},
+                        {"name": "Duvvada", "coords": [17.6250, 82.9550]},
+                        {"name": "Anakapalli", "coords": [17.6810, 83.0030]}
+                    ],
+                    "distance": 45,
+                    "duration": "1 hour"
+                },
+                {
+                    "id": "route3",
+                    "name": "Vizianagaram to Duvvada",
+                    "busNumbers": ["6060", "7070"],
+                    "stops": [
+                        {"name": "Vizianagaram", "coords": [18.1167, 83.4167]},
+                        {"name": "Visakhapatnam", "coords": [17.6868, 83.2185]},
+                        {"name": "Duvvada", "coords": [17.6250, 82.9550]}
+                    ],
+                    "distance": 90,
+                    "duration": "2 hours"
+                },
+                {
+                    "id": "route4",
+                    "name": "Srikakulam to Anakapalli",
+                    "busNumbers": ["8080", "9090"],
+                    "stops": [
+                        {"name": "Srikakulam", "coords": [18.2969, 83.8963]},
+                        {"name": "Vizianagaram", "coords": [18.1167, 83.4167]},
+                        {"name": "Visakhapatnam", "coords": [17.6868, 83.2185]},
+                        {"name": "Duvvada", "coords": [17.6250, 82.9550]},
+                        {"name": "Anakapalli", "coords": [17.6810, 83.0030]}
+                    ],
+                    "distance": 150,
+                    "duration": "3 hours 30 minutes"
+                },
+                {
+                    "id": "route5",
+                    "name": "Visakhapatnam to Vizianagaram",
+                    "busNumbers": ["1111", "1212"],
+                    "stops": [
+                        {"name": "Visakhapatnam", "coords": [17.6868, 83.2185]},
+                        {"name": "Vizianagaram", "coords": [18.1167, 83.4167]}
+                    ],
+                    "distance": 60,
+                    "duration": "1 hour 30 minutes"
+                },
+                {
+                    "id": "route6",
+                    "name": "Anakapalli to Vizianagaram",
+                    "busNumbers": ["1313", "1414"],
+                    "stops": [
+                        {"name": "Anakapalli", "coords": [17.6810, 83.0030]},
+                        {"name": "Duvvada", "coords": [17.6250, 82.9550]},
+                        {"name": "Visakhapatnam", "coords": [17.6868, 83.2185]},
+                        {"name": "Vizianagaram", "coords": [18.1167, 83.4167]}
+                    ],
+                    "distance": 100,
+                    "duration": "2 hours 30 minutes"
+                },
+                {
+                    "id": "route7",
+                    "name": "Duvvada to Srikakulam",
+                    "busNumbers": ["1515", "1616"],
+                    "stops": [
+                        {"name": "Duvvada", "coords": [17.6250, 82.9550]},
+                        {"name": "Visakhapatnam", "coords": [17.6868, 83.2185]},
+                        {"name": "Vizianagaram", "coords": [18.1167, 83.4167]},
+                        {"name": "Srikakulam", "coords": [18.2969, 83.8963]}
+                    ],
+                    "distance": 140,
+                    "duration": "3 hours 15 minutes"
+                }
+            ]
+        };
 
-<script>
-    // Get route details from URL parameters
-    const urlParams = new URLSearchParams(window.location.search);
-    const start = urlParams.get('start') || 'Srikakulam';
-    const destination = urlParams.get('destination') || 'Visakhapatnam';
-    const busNumber = urlParams.get('bus') || '17481';
+        // Global variables
+        let map;
+        let busMarker;
+        let routeLine;
+        let currentRouteData = {
+            stops: [],
+            currentStopIndex: 0,
+            busPosition: [],
+            updateInterval: null,
+            busNumber: ""
+        };
 
-    // Set route information
-    document.getElementById('route-title').textContent = `From ${start} to ${destination}`;
-    document.getElementById('bus-number-display').innerHTML = `<i class="fas fa-bus"></i> ${busNumber}`;
-    document.getElementById('final-destination').textContent = destination;
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get route details from URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const start = urlParams.get('start') || 'Srikakulam';
+            const destination = urlParams.get('destination') || 'Visakhapatnam';
+            const busNumber = urlParams.get('bus') || '';
+            
+            // Find matching route
+            const matchingRoute = findMatchingRoute(start, destination);
+            
+            if (matchingRoute) {
+                initializeRoute(matchingRoute, busNumber);
+            } else {
+                alert("No route found between the selected locations");
+                window.location.href = "index.html";
+            }
 
-    // Bus route data (updated)
-    const routeData = {
-        stops: ["Srikakulam", "Vizianagaram", "Visakhapatnam", "Anakapalli", "Duvvada"],
-        distances: [0, 38, 62, 85, 110],
-        currentStopIndex: 0,
-        busPosition: [18.2969, 83.8963], // Srikakulam
-        updateInterval: null
-    };
-
-    // Initialize the map
-    const map = L.map('map').setView([17.9667, 83.4167], 10);
-
-    // Add OpenStreetMap tiles
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
-
-    // Custom icons
-    const busIcon = L.icon({
-        iconUrl: 'https://cdn-icons-png.flaticon.com/512/2776/2776067.png',
-        iconSize: [32, 32],
-        iconAnchor: [16, 16]
-    });
-
-    const stopIcon = L.divIcon({
-        className: 'map-stop-icon',
-        html: '<div class="stop-marker"></div>',
-        iconSize: [12, 12]
-    });
-
-    // Location coordinates for updated stops
-    const locationCoords = [
-        [18.2969, 83.8963], // Srikakulam
-        [18.1167, 83.4167], // Vizianagaram
-        [17.6868, 83.2185], // Visakhapatnam
-        [17.6810, 83.0030], // Anakapalli
-        [17.6250, 82.9550]  // Duvvada
-    ];
-
-    // Add stop markers
-    // Add labeled stop markers to the map
-routeData.stops.forEach((stop, index) => {
-    const marker = L.marker(locationCoords[index]).addTo(map);
-    marker.bindPopup(`<b>${stop}</b>`).openPopup();
-
-    // Optional: Always show stop name next to marker
-    L.marker(locationCoords[index], {
-        icon: L.divIcon({
-            className: 'custom-label',
-            html: `<div style="background:#fff; border:1px solid #ccc; padding:2px 5px; border-radius:5px; font-size:12px;">
-                        ${stop}
-                   </div>`,
-            iconSize: [100, 24],
-            iconAnchor: [-10, -10]
-        })
-    }).addTo(map);
-});
-
-    // Add bus marker
-    const busMarker = L.marker(routeData.busPosition, {
-        icon: busIcon,
-        zIndexOffset: 1000
-    }).addTo(map)
-      .bindPopup("<b>Bus " + busNumber + "</b>");
-
-    // Draw route line
-    const routeLine = L.polyline(locationCoords, {
-        color: '#1a73e8',
-        weight: 3,
-        opacity: 0.7
-    }).addTo(map);
-
-    // Fit map to route bounds
-    map.fitBounds(routeLine.getBounds());
-
-    // Initialize progress stops
-    renderProgressStops();
-    updateTrackingInfo();
-    startLiveTracking();
-
-    // Render progress stops
-    function renderProgressStops() {
-        const progressStops = document.getElementById('progress-stops');
-        progressStops.innerHTML = '';
-
-        routeData.stops.forEach((stop, index) => {
-            const stopElement = document.createElement('div');
-            stopElement.className = `progress-stop ${index < routeData.currentStopIndex ? 'completed' : ''} ${index === routeData.currentStopIndex ? 'active' : ''}`;
-            stopElement.textContent = stop;
-            progressStops.appendChild(stopElement);
+            // Set up event listeners
+            document.getElementById('refresh-btn').addEventListener('click', refreshTracking);
         });
-    }
 
-    // Update tracking information
-    function updateTrackingInfo() {
-        const nextStopIndex = routeData.currentStopIndex + 1;
-        if (nextStopIndex < routeData.stops.length) {
-            document.getElementById('next-stop').textContent = routeData.stops[nextStopIndex];
-            const eta = Math.floor(Math.random() * 10) + 5;
-            document.getElementById('next-stop-eta').textContent = `${eta} min`;
-            const finalEta = (routeData.stops.length - nextStopIndex) * eta;
-            document.getElementById('final-eta').textContent = `${finalEta} min`;
-        } else {
-            document.getElementById('next-stop').textContent = "Final Destination";
-            document.getElementById('next-stop-eta').textContent = "Arrived";
-            document.getElementById('final-eta').textContent = "Arrived";
-            document.getElementById('bus-status').textContent = "Completed";
-            document.getElementById('bus-status').className = "status-completed";
+        // Find matching route in database
+        function findMatchingRoute(start, end) {
+            for (const route of routeDatabase.routes) {
+                const stopNames = route.stops.map(stop => stop.name);
+                const startIndex = stopNames.indexOf(start);
+                const endIndex = stopNames.indexOf(end);
+                
+                if (startIndex !== -1 && endIndex !== -1 && startIndex < endIndex) {
+                    // Return the relevant portion of the route
+                    return {
+                        ...route,
+                        stops: route.stops.slice(startIndex, endIndex + 1)
+                    };
+                }
+                
+                // Check reverse route
+                if (startIndex !== -1 && endIndex !== -1 && startIndex > endIndex) {
+                    // Return the reversed route
+                    const reversedStops = [...route.stops].reverse();
+                    const newStartIndex = reversedStops.findIndex(stop => stop.name === start);
+                    const newEndIndex = reversedStops.findIndex(stop => stop.name === end);
+                    
+                    return {
+                        ...route,
+                        name: `${start} to ${end}`,
+                        stops: reversedStops.slice(newStartIndex, newEndIndex + 1)
+                    };
+                }
+            }
+            return null;
         }
 
-        const progress = (routeData.currentStopIndex / (routeData.stops.length - 1)) * 100;
-        document.getElementById('progress-bar').style.width = `${progress}%`;
+        // Initialize the selected route
+        function initializeRoute(route, busNumber) {
+            // Set route information
+            document.getElementById('route-title').textContent = `From ${route.stops[0].name} to ${route.stops[route.stops.length - 1].name}`;
+            
+            // Use provided bus number or pick one from the route
+            const displayBusNumber = busNumber || route.busNumbers[Math.floor(Math.random() * route.busNumbers.length)];
+            document.getElementById('bus-number-display').innerHTML = `<i class="fas fa-bus"></i> ${displayBusNumber}`;
+            document.getElementById('final-destination').textContent = route.stops[route.stops.length - 1].name;
 
-        document.getElementById('current-speed').textContent = `${Math.floor(Math.random() * 20) + 40} km/h`;
-        document.getElementById('current-road').textContent = "NH16";
-        const occupancy = Math.floor(Math.random() * 30) + 20;
-        document.getElementById('bus-occupancy').textContent = `${occupancy}% full`;
-        document.getElementById('available-seats').textContent = `${Math.floor((100 - occupancy) * 0.45)} seats available`;
-        const now = new Date();
-        document.getElementById('last-updated').textContent = now.toLocaleTimeString();
-    }
+            // Initialize route data
+            currentRouteData = {
+                stops: route.stops,
+                currentStopIndex: 0,
+                busPosition: route.stops[0].coords,
+                updateInterval: null,
+                busNumber: displayBusNumber
+            };
 
-    // Simulate bus movement
-    function moveBusToNextStop() {
-        if (routeData.currentStopIndex < routeData.stops.length - 1) {
-            routeData.currentStopIndex++;
-            routeData.busPosition = locationCoords[routeData.currentStopIndex];
-            busMarker.setLatLng(routeData.busPosition);
-            map.panTo(routeData.busPosition);
+            // Initialize the map
+            initializeMap();
+
+            // Start tracking
             renderProgressStops();
             updateTrackingInfo();
+            startLiveTracking();
+        }
 
-            if (routeData.currentStopIndex === routeData.stops.length - 1) {
-                clearInterval(routeData.updateInterval);
-                document.getElementById('refresh-btn').disabled = true;
+        // Initialize the map
+        function initializeMap() {
+            map = L.map('map').setView(currentRouteData.busPosition, 12);
+
+            // Add OpenStreetMap tiles
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            // Custom bus icon
+            const busIcon = L.icon({
+                iconUrl: 'https://cdn-icons-png.flaticon.com/512/2776/2776067.png',
+                iconSize: [32, 32],
+                iconAnchor: [16, 16]
+            });
+
+            // Add bus marker
+            busMarker = L.marker(currentRouteData.busPosition, {
+                icon: busIcon,
+                zIndexOffset: 1000
+            }).addTo(map)
+              .bindPopup(`<b>Bus ${currentRouteData.busNumber}</b>`);
+
+            // Draw route line
+            const routeCoords = currentRouteData.stops.map(stop => stop.coords);
+            routeLine = L.polyline(routeCoords, {
+                color: '#1a73e8',
+                weight: 3,
+                opacity: 0.7
+            }).addTo(map);
+
+            // Add stop markers with labels
+            currentRouteData.stops.forEach((stop, index) => {
+                const marker = L.marker(stop.coords).addTo(map);
+                marker.bindPopup(`<b>${stop.name}</b>`).openPopup();
+
+                // Label for the stop
+                L.marker(stop.coords, {
+                    icon: L.divIcon({
+                        className: 'custom-label',
+                        html: `<div style="background:#fff; border:1px solid #ccc; padding:2px 5px; border-radius:5px; font-size:12px;">
+                                    ${stop.name}
+                               </div>`,
+                        iconSize: [100, 24],
+                        iconAnchor: [-10, -10]
+                    })
+                }).addTo(map);
+            });
+
+            // Fit map to route bounds
+            map.fitBounds(routeLine.getBounds());
+        }
+
+        // Render progress stops
+        function renderProgressStops() {
+            const progressStops = document.getElementById('progress-stops');
+            progressStops.innerHTML = '';
+
+            currentRouteData.stops.forEach((stop, index) => {
+                const stopElement = document.createElement('div');
+                stopElement.className = `progress-stop ${index < currentRouteData.currentStopIndex ? 'completed' : ''} ${index === currentRouteData.currentStopIndex ? 'active' : ''}`;
+                stopElement.textContent = stop.name;
+                progressStops.appendChild(stopElement);
+            });
+        }
+
+        // Update tracking information
+        function updateTrackingInfo() {
+            const nextStopIndex = currentRouteData.currentStopIndex + 1;
+            if (nextStopIndex < currentRouteData.stops.length) {
+                document.getElementById('next-stop').textContent = currentRouteData.stops[nextStopIndex].name;
+                const eta = Math.floor(Math.random() * 10) + 5;
+                document.getElementById('next-stop-eta').textContent = `${eta} min`;
+                const finalEta = (currentRouteData.stops.length - nextStopIndex) * eta;
+                document.getElementById('final-eta').textContent = `${finalEta} min`;
+                document.getElementById('bus-status').textContent = "On Time";
+                document.getElementById('bus-status').className = "status-on-time";
+            } else {
+                document.getElementById('next-stop').textContent = "Final Destination";
+                document.getElementById('next-stop-eta').textContent = "Arrived";
+                document.getElementById('final-eta').textContent = "Arrived";
+                document.getElementById('bus-status').textContent = "Completed";
+                document.getElementById('bus-status').className = "status-completed";
+            }
+
+            const progress = (currentRouteData.currentStopIndex / (currentRouteData.stops.length - 1)) * 100;
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+
+            document.getElementById('current-speed').textContent = `${Math.floor(Math.random() * 20) + 40} km/h`;
+            document.getElementById('current-road').textContent = "NH16";
+            const occupancy = Math.floor(Math.random() * 30) + 20;
+            document.getElementById('bus-occupancy').textContent = `${occupancy}% full`;
+            document.getElementById('available-seats').textContent = `${Math.floor((100 - occupancy) * 0.45)} seats available`;
+            const now = new Date();
+            document.getElementById('last-updated').textContent = now.toLocaleTimeString();
+        }
+
+        // Simulate bus movement
+        function moveBusToNextStop() {
+            if (currentRouteData.currentStopIndex < currentRouteData.stops.length - 1) {
+                currentRouteData.currentStopIndex++;
+                currentRouteData.busPosition = currentRouteData.stops[currentRouteData.currentStopIndex].coords;
+                busMarker.setLatLng(currentRouteData.busPosition);
+                map.panTo(currentRouteData.busPosition);
+                renderProgressStops();
+                updateTrackingInfo();
+
+                if (currentRouteData.currentStopIndex === currentRouteData.stops.length - 1) {
+                    clearInterval(currentRouteData.updateInterval);
+                    document.getElementById('refresh-btn').disabled = true;
+                }
             }
         }
-    }
 
-    // Start live tracking simulation
-    function startLiveTracking() {
-        routeData.updateInterval = setInterval(moveBusToNextStop, 10000);
-    }
+        // Start live tracking simulation
+        function startLiveTracking() {
+            if (currentRouteData.updateInterval) {
+                clearInterval(currentRouteData.updateInterval);
+            }
+            currentRouteData.updateInterval = setInterval(moveBusToNextStop, 10000);
+        }
 
-    // Refresh button handler
-    document.getElementById('refresh-btn').addEventListener('click', () => {
-        updateTrackingInfo();
-    });
-</script>
+        // Refresh tracking data
+        function refreshTracking() {
+            updateTrackingInfo();
+        }
+    </script>
 </body>
-    </html>
+</html>
